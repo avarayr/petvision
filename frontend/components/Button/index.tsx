@@ -3,19 +3,20 @@ import styles from "./button.module.scss";
 function Button({
   children,
   onClick,
-  className,
   disabled,
+  style,
 }: {
   children: React.ReactNode;
   onClick: () => void;
-  className?: string;
   disabled?: boolean;
+  style?: React.CSSProperties;
 }) {
   return (
     <button
-      className={`${styles.button} ${className}`}
+      className={styles.button}
       onClick={onClick}
       disabled={disabled}
+      style={style}
     >
       {children}
     </button>
