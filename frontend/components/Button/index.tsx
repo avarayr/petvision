@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import styles from "./button.module.scss";
 
 function Button({
@@ -12,14 +13,15 @@ function Button({
   style?: React.CSSProperties;
 }) {
   return (
-    <button
-      className={styles.button}
+    <motion.button
       onClick={onClick}
+      className={styles.button}
       disabled={disabled}
       style={style}
+      whileTap={{ scale: 0.9, boxShadow: "rgba(0, 0, 0, 0) 0px 2px 4px 0px" }}
     >
       {children}
-    </button>
+    </motion.button>
   );
 }
 
