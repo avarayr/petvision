@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import type { NextPage } from "next";
 import React from "react";
+import Webcam from "react-webcam";
 import Button from "../components/Button";
 import Container from "../components/Container";
 import HintText from "../components/HintText";
@@ -13,11 +14,27 @@ const Home: NextPage = () => {
   const handleScanButtonClick = () => {
     setIsScanning(!isScanning);
   };
+  const videoConstraints = {
+    facingMode: "user",
+  };
+  const WebcamCapture = () => {
+    const webcamRef = React.useRef(null);
+  };
 
   return (
     <div>
       <Container>
-        <HintText>Tap to start scanning for 🐱</HintText>
+        {isScanning ? (
+          <Webcam
+            audio={false}
+            height={500}
+            width={500}
+            videoConstraints={videoConstraints}
+          />
+        ) : (
+          <HintText>Tap to start scanning for 🐱</HintText>
+        )}
+        <div id="root"></div>
         <Button onClick={handleScanButtonClick}>
           <AnimatePresence>
             <motion.div layout>
