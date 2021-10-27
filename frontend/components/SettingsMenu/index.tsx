@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useEffect } from "react";
 import { CSSProperties } from "styled-components";
 import { useSettings } from "../../contexts/Settings";
 import useMediaDevices from "../../hooks/useMediaDevices";
@@ -25,6 +25,7 @@ function SettingsMenu() {
     boxShadow: "0px 10px 10px rgba(0, 0, 0, 0.4)",
     top: "-160px",
     left: "calc(-150px)",
+    cursor: "auto",
   } as CSSProperties;
 
   const handleBoxClick = (
@@ -39,16 +40,32 @@ function SettingsMenu() {
   const { devices } = useMediaDevices();
   const { camera, setCamera } = useSettings();
 
-  const changeCamera = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCamera({ ...camera, deviceId: e.target.value });
+  const saveToLocalStorage = (data: any) => {
+    localStorage.setItem("camera", JSON.stringify(data));
+  };
+
+  const changeCamera = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const data = { ...camera, deviceId: e.target.value };
+    setCamera(data);
+    saveToLocalStorage(data);
   };
 
   const switchCameraFacing = () => {
-    setCamera({
+    const data = {
       ...camera,
       facingMode: camera.facingMode === "user" ? "environment" : "user",
-    });
+    };
+    setCamera(data);
+    saveToLocalStorage(data);
   };
+
+  useEffect(() => {
+    // get camera from local storage
+    const cameraFromLocalStorage = localStorage.getItem("camera");
+    if (cameraFromLocalStorage) {
+      setCamera(JSON.parse(cameraFromLocalStorage));
+    }
+  }, [setCamera]);
 
   return (
     <NoSSR>
@@ -62,7 +79,7 @@ function SettingsMenu() {
         style={settingsBoxStyle}
       >
         <p>Settings</p>
-        <select onChange={changeCamera}>
+        <select onChange={changeCamera} value={camera.deviceId}>
           {devices.map(({ deviceId: id, label }) => (
             <option key={id} value={id}>
               {label}
@@ -72,7 +89,20 @@ function SettingsMenu() {
 
         <hr />
 
-        <button style={{ marginTop: "10px" }}>Switch camera facing</button>
+        <div
+          style={{
+            marginTop: "10px",
+            background: "#ddd",
+            padding: "10px",
+            borderRadius: "10px",
+            width: "200px",
+            margin: "auto",
+            cursor: "pointer",
+          }}
+          onClick={switchCameraFacing}
+        >
+          Switch camera facing
+        </div>
       </motion.div>
     </NoSSR>
   );

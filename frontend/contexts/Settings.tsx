@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 interface ICamera {
-  facingMode: ("user" | "environment") & string;
+  facingMode: string;
   deviceId: string;
 }
 
