@@ -7,6 +7,7 @@ import Container from "../components/Container";
 import HintText from "../components/HintText";
 import PauseIcon from "../components/Icons/PauseIcon";
 import RightTriangle from "../components/Icons/RightTriangle";
+import * as mobilenet from "@tensorflow-models/mobilenet";
 
 const Home: NextPage = () => {
   const [isScanning, setIsScanning] = React.useState(false);
