@@ -11,6 +11,10 @@ import PauseIcon from "../components/Icons/PauseIcon";
 import RightTriangle from "../components/Icons/RightTriangle";
 import SettingsMenu from "../components/SettingsMenu";
 import { useSettings } from "../contexts/Settings";
+import "@tensorflow/tfjs-core";
+import "@tensorflow/tfjs-converter";
+import "@tensorflow/tfjs-backend-webgl";
+import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import Head from "next/head";
 
 const Home: NextPage = () => {
@@ -34,7 +38,31 @@ const Home: NextPage = () => {
     }
   }, [setCamera]);
 
-  const webcamRef = useRef(null);
+  const webcamRef = useRef<Webcam>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const importCocoSsdModel = async () => {
+    const model = await cocoSsd.load();
+    console.log("The coco-ssd model has loaded.");
+    setInterval(() => {
+      detect(model);
+    }, 5);
+  };
+
+  const detect = async (model: cocoSsd.ObjectDetection) => {
+    if (webcamRef.current && canvasRef.current) {
+      const webcamCurrent = webcamRef.current as any;
+      if (webcamCurrent.video.readyState == 4) {
+        const video = webcamCurrent.video;
+        const prediction = await model.detect(video);
+        console.log("The prediction made is: " + prediction);
+      }
+    }
+  };
+
+  useEffect(() => {
+    importCocoSsdModel();
+  }, []);
 
   return (
     <>
