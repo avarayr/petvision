@@ -38,26 +38,11 @@ const Home: NextPage = () => {
     }
   }, [setCamera]);
 
-  const webcamRef = useRef<Webcam>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const webcamRef = useRef(null);
 
   const importCocoSsdModel = async () => {
     const model = await cocoSsd.load();
     console.log("The coco-ssd model has loaded.");
-    setInterval(() => {
-      detect(model);
-    }, 5);
-  };
-
-  const detect = async (model: cocoSsd.ObjectDetection) => {
-    if (webcamRef.current && canvasRef.current) {
-      const webcamCurrent = webcamRef.current as any;
-      if (webcamCurrent.video.readyState == 4) {
-        const video = webcamCurrent.video;
-        const prediction = await model.detect(video);
-        console.log("The prediction made is: " + prediction);
-      }
-    }
   };
 
   useEffect(() => {
