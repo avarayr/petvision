@@ -9,15 +9,34 @@ import Webcam from "react-webcam";
 import { useSettings } from "../../contexts/Settings";
 import useDebounce from "../../hooks/useDebounce";
 import HintText from "../HintText";
+import useEmbeddedAPI from "../../hooks/useEmbeddedAPI";
 
 function WebcamScanner({ isScanning }: { isScanning: boolean }) {
   const [detectedClass, setDetectedClass] = useState("");
+  const [lastDetectedDebouncedClass, setLastDetectedDebouncedClass] =
+    useState("");
   const debouncedDetectedClass = useDebounce(detectedClass, 500);
   const [cocoModel, setCocoModel] = useState<cocoSsd.ObjectDetection | null>(
     null
   );
 
+  const targetClass = "cat";
+
   const { camera, setCamera } = useSettings();
+  const { sendONRequest } = useEmbeddedAPI();
+
+  // set the lastDetectedDebouncedClass to the detectedClass
+  useEffect(() => {
+    if (debouncedDetectedClass !== lastDetectedDebouncedClass) {
+      setLastDetectedDebouncedClass(debouncedDetectedClass);
+      if (debouncedDetectedClass === targetClass) {
+        sendONRequest();
+        // we will rely on the device to automatically turn off
+        // embedded contains a safety mechanism to prevent the
+        // device from staying on indefinitely
+      }
+    }
+  }, [debouncedDetectedClass]);
 
   useEffect(() => {
     const localCamera = localStorage.getItem("camera");
