@@ -10,7 +10,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 yarn install
 ```
 
-First, run the development server:
+## ⚠️ Make sure you have a file `.env.local` in the `frontend` folder.
+
+- Grab the example file from the /frontend/.env.local.example
+
+Run the development server:
 
 ```bash
 yarn dev
