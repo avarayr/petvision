@@ -20,6 +20,7 @@
             "includePath": [
                 "/Users/mika/Library/Arduino15/packages/esp8266/hardware/esp8266/3.0.2/tools/sdk/include",
                 "/Users/mika/Library/Arduino15/packages/esp8266/hardware/esp8266/3.0.2/tools/sdk/lwip2/include",
+                "/Users/mika/classes/cs530-systems/projects/petvision/.arduino-build/core",
                 "/Users/mika/Library/Arduino15/packages/esp8266/hardware/esp8266/3.0.2/cores/esp8266",
                 "/Users/mika/Library/Arduino15/packages/esp8266/hardware/esp8266/3.0.2/variants/generic",
                 "/Users/mika/Library/Arduino15/packages/esp8266/hardware/esp8266/3.0.2/libraries/ESP8266WiFi/src",
@@ -47,7 +48,7 @@
                 "TCP_MSS=536",
                 "LWIP_FEATURES=1",
                 "LWIP_IPV6=0",
-                "ARDUINO=10817",
+                "ARDUINO=10607",
                 "ARDUINO_ESP8266_GENERIC",
                 "ARDUINO_ARCH_ESP8266",
                 "ARDUINO_BOARD=\"ESP8266_GENERIC\"",

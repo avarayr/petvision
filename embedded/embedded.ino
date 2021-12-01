@@ -18,6 +18,9 @@
 
 WiFiServer server(80);
 
+float ledTurnOnTime = 0;
+float maxLedOnTimeInSeconds = 10;
+
 void setup()
 {
   // put your setup code here, to run once:
@@ -25,6 +28,9 @@ void setup()
   // let's open the D5 pin as an output
   pinMode(D5, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
+
+  // turn off the LED on startup
+  digitalWrite(LED_BUILTIN, HIGH);
 
   // open the wifi connection
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -45,6 +51,31 @@ void setup()
   Serial.println("Server started");
 }
 
+void turnOnSolenoid()
+{
+  // pulling the LED_BUILTIN pin low turns the LED on (active low)
+  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(D5, HIGH);
+  ledTurnOnTime = millis();
+}
+
+void turnOffSolenoid()
+{
+  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(D5, LOW);
+  ledTurnOnTime = 0;
+}
+
+void safetyLoop()
+{
+  // check if the solenoid has been on for too long
+  if (ledTurnOnTime > 0 && millis() - ledTurnOnTime > maxLedOnTimeInSeconds * 1000)
+  {
+    turnOffSolenoid();
+    ledTurnOnTime = 0;
+  }
+}
+
 // method that will handle the incoming requests
 String handleRequest(String request)
 {
@@ -52,12 +83,12 @@ String handleRequest(String request)
   Serial.println(path);
   if (path == "/on")
   {
-    digitalWrite(D5, HIGH);
+    turnOnSolenoid();
     return "<a href='/off' style='font-size:28px;'>Turn off</a>";
   }
   else if (path == "/off")
   {
-    digitalWrite(D5, LOW);
+    turnOffSolenoid();
     return "<a href='/on' style='font-size:28px;'>Turn on</a>";
   }
   else
@@ -68,7 +99,8 @@ String handleRequest(String request)
 
 void loop()
 {
-  // put your main code here, to run repeatedly:
+  safetyLoop();
+
   WiFiClient client = server.available();
   if (client)
   {
