@@ -121,7 +121,10 @@ void loop()
           // send a standard http response header
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
-          client.println("Connection: close"); // the connection will be closed after completion of the response
+          client.println("Connection: close");              // the connection will be closed after completion of the response
+          client.println("Access-Control-Allow-Origin: *"); // open CORS for all domains
+          client.println("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+
           client.println();
           // send the content of the requested file
           client.print(handleRequest(request));
