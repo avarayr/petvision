@@ -107,8 +107,14 @@ function WebcamScanner({ isScanning }: { isScanning: boolean }) {
 
           <Webcam
             audio={false}
-            height={500}
-            width={500}
+            style={{
+              aspectRatio: "9 / 16",
+              width: "calc(100% - 2rem)",
+              maxHeight: "80%",
+              objectFit: "cover",
+              marginBottom: "2rem",
+              borderRadius: "1rem",
+            }}
             onLoadedData={predictWebcam}
             ref={webcamRef}
             videoConstraints={{
